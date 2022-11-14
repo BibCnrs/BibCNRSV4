@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  install:
+    image: node:18
+    user: ${UID}:${GID}
+    command: 'yarn'
+    working_dir: /app/
+    volumes:
+      - '.:/app'
+    environment:
+      - NODE_ENV=development
+      - HOME=/tmp
