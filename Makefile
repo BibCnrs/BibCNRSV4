@@ -11,10 +11,10 @@ help:
 
 #### STARTING PROJECT ###
 
-DOCKER_COMPOSE = docker-compose -p one-supply -f docker-compose.yaml
-DOCKER_COMPOSE_INSTALL = docker-compose -p one-supply -f docker-compose.install.yaml
-DOCKER_COMPOSE_TEST = docker-compose -p one-supply -f docker-compose.test.yaml
-DOCKER_COMPOSE_E2E = docker-compose -p one-supply-e2e -f docker-compose.e2e.yaml
+DOCKER_COMPOSE = docker-compose -p bibcnrs -f docker-compose.yaml
+DOCKER_COMPOSE_INSTALL = docker-compose -p bibcnrs -f docker-compose.install.yaml
+DOCKER_COMPOSE_TEST = docker-compose -p bibcnrs -f docker-compose.test.yaml
+DOCKER_COMPOSE_E2E = docker-compose -p bibcnrs-e2e -f docker-compose.e2e.yaml
 
 
 install: ## Install all dependencies.
