@@ -9,10 +9,16 @@ services:
       - '.:/app'
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - COOKIE_SECRET=${COOKIE_SECRET}
+      - EBSCO_API_URL=${EBSCO_API_URL}
+      - INSHS_USER_ID=${INSHS_USER_ID}
+      - INSHS_PASSWORD=${INSHS_PASSWORD}
+      - INSHS_PROFILE=${INSHS_PROFILE}
     ports:
-      - '3001:3001'
-    depends_on:
-      - db
+      - '3002:3001'
+    # depends_on:
+    #   - db
 
   front:
     image: node:18
@@ -25,16 +31,16 @@ services:
     ports:
       - '3000:3000'
 
-  db:
-    image: postgres:14
-    ports:
-      - '5432:5432'
-    environment:
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-      - POSTGRES_DB=${DATABASE_NAME}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+  # db:
+  #   image: postgres:14
+  #   ports:
+  #     - '5432:5432'
+  #   environment:
+  #     - POSTGRES_USER=${DATABASE_USER}
+  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+  #     - POSTGRES_DB=${DATABASE_NAME}
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
 
 volumes:
   pgdata:
