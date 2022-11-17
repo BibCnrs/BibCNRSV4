@@ -56,7 +56,7 @@ export default function ResultList({ modeSearch }: { modeSearch: string }) {
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
         PaperProps={{
-          sx: { width: "20%" },
+          sx: { width: '20%' },
         }}
       >
         <SearchHistory />

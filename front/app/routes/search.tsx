@@ -23,7 +23,7 @@ function a11yProps(index: number) {
 
 export default function Search() {
   const data = useActionData();
-  let [searchParams, setSearchParams] = useSearchParams();
+  let [_, setSearchParams] = useSearchParams();
 
   const [modeSearch, setModeSearch] = useState('article');
 
@@ -89,7 +89,12 @@ export default function Search() {
             centered
           >
             <Tab label="Article" value="article" {...a11yProps(0)} />
-            <Tab label="Publication" disabled value="publication" {...a11yProps(1)} />
+            <Tab
+              label="Publication"
+              disabled
+              value="publication"
+              {...a11yProps(1)}
+            />
             <Tab label="Metadore" disabled value="metadore" {...a11yProps(2)} />
           </Tabs>
         </Box>

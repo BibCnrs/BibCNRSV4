@@ -19,7 +19,7 @@ const theme = createTheme({
       main: blue[900],
     },
     background: {
-      default: "#fff",
+      default: '#fff',
     },
   },
 });

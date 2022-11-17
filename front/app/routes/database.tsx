@@ -7,7 +7,6 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemText,
   ListSubheader,
   Typography,
 } from '@mui/material';
@@ -60,7 +59,10 @@ export default function Search() {
                   <Card sx={{ minWidth: 345 }}>
                     <CardHeader
                       avatar={
-                        <Avatar sx={{ bgcolor: getColour() }} aria-label="recipe">
+                        <Avatar
+                          sx={{ bgcolor: getColour() }}
+                          aria-label="recipe"
+                        >
                           {item}
                         </Avatar>
                       }
