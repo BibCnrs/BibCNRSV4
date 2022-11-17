@@ -55,4 +55,4 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: 🔎 Run Test
-        run: make unit-test
+        run: make unit-test-api
