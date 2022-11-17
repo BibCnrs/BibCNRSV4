@@ -11,10 +11,10 @@ help:
 
 #### STARTING PROJECT ###
 
-DOCKER_COMPOSE = docker-compose -p one-supply -f docker-compose.yaml
-DOCKER_COMPOSE_INSTALL = docker-compose -p one-supply -f docker-compose.install.yaml
-DOCKER_COMPOSE_TEST = docker-compose -p one-supply -f docker-compose.test.yaml
-DOCKER_COMPOSE_E2E = docker-compose -p one-supply-e2e -f docker-compose.e2e.yaml
+DOCKER_COMPOSE = docker-compose -p bibcnrs -f docker-compose.yaml
+DOCKER_COMPOSE_INSTALL = docker-compose -p bibcnrs -f docker-compose.install.yaml
+DOCKER_COMPOSE_TEST = docker-compose -p bibcnrs -f docker-compose.test.yaml
+DOCKER_COMPOSE_E2E = docker-compose -p bibcnrs-e2e -f docker-compose.e2e.yaml
 
 
 install: ## Install all dependencies.
@@ -34,14 +34,6 @@ unit-test: ## Start tests
 
 unit-test-front: ## Start tests for front
 	$(DOCKER_COMPOSE_TEST) run --rm --no-deps test /bin/bash -c "cd front; yarn run test" 
-
-e2e-test-front: ## Start tests for front
-	$(DOCKER_COMPOSE_E2E) down
-	$(DOCKER_COMPOSE_E2E) up --force-recreate -d db
-	$(DOCKER_COMPOSE_E2E) run --rm --no-deps api /bin/bash -c "yarn run migration:run; npx prisma db seed"
-	$(DOCKER_COMPOSE_E2E) up --force-recreate -d front api
-	$(DOCKER_COMPOSE_E2E) run --rm --no-deps e2e "npx cypress run"
-	$(DOCKER_COMPOSE_E2E) down
 
 unit-test-watch-front: ## Start tests for front
 	$(DOCKER_COMPOSE_TEST) run --rm --no-deps test /bin/bash -c "cd front; yarn run test:watch" 	
