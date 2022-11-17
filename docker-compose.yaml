@@ -27,7 +27,7 @@ services:
     volumes:
       - '.:/app'
     environment:
-      - VITE_API_URL=${VITE_API_URL}
+      - API_URL=${API_URL}
     ports:
       - '3000:3000'
 

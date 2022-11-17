@@ -47,7 +47,6 @@ export default function ResultItem({ index }: { index: number }) {
         title="Cross Cultural Attitude Inventory [and] Test Manual."
         subheader="September 14, 2016"
         color="secondary"
-        disableSpacing
         {...a11yProps(index)}
       />
       <CardContent sx={{ paddingY: 0 }}>
