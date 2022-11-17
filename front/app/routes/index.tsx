@@ -4,8 +4,15 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useTransition } from "@remix-run/react";
+import { Form } from "@remix-run/react";
+import { redirect } from '@remix-run/node';
+import { FormEvent } from 'react';
 
 export default function Index() {
+  const transition = useTransition();
+  console.log('index transition', transition);
+
   return (
     <Box
       sx={{
@@ -24,7 +31,7 @@ export default function Index() {
       >
         Accès aux ressources documentaires du CNRS
       </Typography>
-      <form method="post" action="search">
+      <Form method="get" action="/search">
         <Box
           sx={{
             p: '2px 4px',
@@ -52,7 +59,7 @@ export default function Index() {
             <SearchIcon />
           </IconButton>
         </Box>
-      </form>
+      </Form>
     </Box>
   );
 }

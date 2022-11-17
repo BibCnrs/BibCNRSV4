@@ -3,12 +3,13 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box } from '@mui/system';
-import { useActionData, useSearchParams, useLoaderData } from '@remix-run/react';
+import { useActionData, useSearchParams, useLoaderData, useTransition } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { CircularProgress, Tab, Tabs } from '@mui/material';
 import SearchResult from '~/components/Search/SearchResult';
 
 export async function loader({ request }: { request: Request }) {
+  //console.log('request', request);
   const url = new URL(request.url);
   const term = url.searchParams.get('term') || '';
   const res = await fetch(
@@ -18,11 +19,11 @@ export async function loader({ request }: { request: Request }) {
   return { term, data };
 }
 
-export async function action({ request }: { request: Request }) {
-  const formData = await request.formData();
-  const term = formData.get('term');
-  return { term };
-}
+// export async function action({ request }: { request: Request }) {
+//   const formData = await request.formData();
+//   const term = formData.get('term');
+//   return { term };
+// }
 
 function a11yProps(index: number) {
   return {
@@ -32,7 +33,10 @@ function a11yProps(index: number) {
 }
 
 export default function Search() {
-  const actionData = useActionData();
+  //const actionData = useActionData();
+  const transition = useTransition();
+  console.log('search transition', transition);
+
   const loaderData = useLoaderData();
   const [, setSearchParams] = useSearchParams();
 
@@ -42,11 +46,11 @@ export default function Search() {
     setModeSearch(newValue);
   };
 
-  useEffect(() => {
-    if (actionData?.term) {
-      setSearchParams({ term: actionData.term });
-    }
-  }, [actionData, setSearchParams]);
+  // useEffect(() => {
+  //   if (actionData?.term) {
+  //     setSearchParams({ term: actionData.term });
+  //   }
+  // }, [actionData, setSearchParams]);
 
   return (
     <Box
@@ -59,7 +63,7 @@ export default function Search() {
       }}
     >
       <Box sx={{ padding: '2rem' }}>
-        <form method="post">
+        <form method="get">
           <Box
             sx={{
               p: '2px 4px',
