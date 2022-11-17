@@ -9,7 +9,7 @@ import { Tab, Tabs } from '@mui/material';
 import SearchResult from '~/components/Search/SearchResult';
 
 export async function action({ request }: { request: Request }) {
-  let formData = await request.formData();
+  const formData = await request.formData();
   const query = formData.get('query');
   return query;
 }
@@ -23,7 +23,7 @@ function a11yProps(index: number) {
 
 export default function Search() {
   const data = useActionData();
-  let [_, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const [modeSearch, setModeSearch] = useState('article');
 
@@ -35,7 +35,7 @@ export default function Search() {
     if (data) {
       setSearchParams({ query: data });
     }
-  }, [data]);
+  }, [data, setSearchParams]);
 
   return (
     <Box

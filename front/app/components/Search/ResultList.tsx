@@ -45,7 +45,7 @@ export default function ResultList({ modeSearch }: { modeSearch: string }) {
       </Box>
 
       {[...Array(10)].map((x, i) => (
-        <ResultItem index={i} />
+        <ResultItem key={i} index={i} />
       ))}
 
       <Pagination count={10} color="primary" sx={{ paddingBottom: '1rem' }} />
