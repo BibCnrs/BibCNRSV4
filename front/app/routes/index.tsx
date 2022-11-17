@@ -40,7 +40,7 @@ export default function Index() {
             sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
             placeholder="Search article"
             inputProps={{ 'aria-label': 'Search article input' }}
-            name="query"
+            name="term"
           />
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton

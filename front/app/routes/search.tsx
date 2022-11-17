@@ -3,19 +3,25 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box } from '@mui/system';
-import { useActionData, useSearchParams } from '@remix-run/react';
+import { useActionData, useSearchParams, useLoaderData } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { CircularProgress, Tab, Tabs } from '@mui/material';
 import SearchResult from '~/components/Search/SearchResult';
 
-export async function action({ request }: { request: Request }) {
-  const formData = await request.formData();
-  const query = formData.get('query');
-  let res = await fetch(
-    `${process.env.API_URL}/ebsco/INSHS/article/search?term=${query}&resultPerPage=10`,
+export async function loader({ request }: { request: Request }) {
+  const url = new URL(request.url);
+  const term = url.searchParams.get('term') || '';
+  const res = await fetch(
+    `${process.env.API_URL}/ebsco/INSHS/article/search?term=${term}&resultPerPage=10`,
   );
   const data = await res.json();
-  return { query, data };
+  return { term, data };
+}
+
+export async function action({ request }: { request: Request }) {
+  const formData = await request.formData();
+  const term = formData.get('term');
+  return { term };
 }
 
 function a11yProps(index: number) {
@@ -27,6 +33,7 @@ function a11yProps(index: number) {
 
 export default function Search() {
   const actionData = useActionData();
+  const loaderData = useLoaderData();
   const [, setSearchParams] = useSearchParams();
 
   const [modeSearch, setModeSearch] = useState('article');
@@ -36,8 +43,8 @@ export default function Search() {
   };
 
   useEffect(() => {
-    if (actionData?.query) {
-      // setSearchParams({ query: actionData.query });
+    if (actionData?.term) {
+      setSearchParams({ term: actionData.term });
     }
   }, [actionData, setSearchParams]);
 
@@ -68,8 +75,8 @@ export default function Search() {
               sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
               placeholder="Search article"
               inputProps={{ 'aria-label': 'Search article input' }}
-              name="query"
-              defaultValue={actionData?.query || ''}
+              name="term"
+              defaultValue={loaderData?.term || ''}
             />
             <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
             <IconButton
@@ -102,7 +109,7 @@ export default function Search() {
             <Tab label="Metadore" disabled value="metadore" {...a11yProps(2)} />
           </Tabs>
         </Box>
-        {actionData?.data ? (
+        {loaderData?.data ? (
           <SearchResult modeSearch={modeSearch} />
         ) : (
           <Box display="flex" justifyContent="center" sx={{ marginTop: 4 }}>
