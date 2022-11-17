@@ -1,6 +1,6 @@
-import { Transform } from "class-transformer";
-import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
-import { toBoolean } from "../../common/helper/cast.helper";
+import { Transform } from 'class-transformer';
+import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { toBoolean } from '../../common/helper/cast.helper';
 
 export class ArticleSearchQueryDto {
   @IsString()

@@ -5,9 +5,12 @@ import { EbscoService } from './ebsco.service';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [JwtModule.register({
-    secret: process.env.JWT_SECRET,
-  }), HttpModule],
+  imports: [
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+    }),
+    HttpModule,
+  ],
   controllers: [EbscoController],
   providers: [EbscoService],
 })

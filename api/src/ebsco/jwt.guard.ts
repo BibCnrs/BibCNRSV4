@@ -1,6 +1,11 @@
 // This guard is not currently used because we do not have login feature on frontend and we create new ebsco session on each request
-import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
-import { JwtService } from "@nestjs/jwt";
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { EbscoService } from './ebsco.service';
 
@@ -10,11 +15,13 @@ const COOKIE_NAME = 'bib-token';
 export class JwtGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
-    @Inject(EbscoService) private readonly ebscoService: EbscoService
+    @Inject(EbscoService) private readonly ebscoService: EbscoService,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const request = this.getRequest<Request & { user?: Record<string, unknown> }>(context);
+    const request = this.getRequest<
+      Request & { user?: Record<string, unknown> }
+    >(context);
     const response = this.getResponse<Response>(context);
     try {
       const token = this.getToken(request);

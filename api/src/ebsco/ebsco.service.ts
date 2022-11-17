@@ -61,27 +61,22 @@ export class EbscoService {
             BooleanOperator: 'AND',
             FieldCode: null,
             Term: query.term,
-          }
+          },
         ],
         SearchMode: 'all',
         IncludeFacets: 'y',
         FacetFilters: [],
-        Limiters:
-          query.fullText === true
-            ? [{ Id: 'FT', Values: ['Y'] }]
-            : [],
+        Limiters: query.fullText === true ? [{ Id: 'FT', Values: ['Y'] }] : [],
         Expanders: [],
         Sort: query.sort || 'relevance',
       },
       RetrievalCriteria: {
-        View: "brief",
+        View: 'brief',
         ResultsPerPage: query.resultsPerPage,
         PageNumber: 1,
         Highlight: 'n',
       },
-      Actions: [
-        "goToPage(1)",
-      ],
+      Actions: ['goToPage(1)'],
     };
   }
 
