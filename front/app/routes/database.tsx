@@ -39,7 +39,7 @@ export default function Search() {
         }}
       >
         {/* Display category by letters */}
-        {['A', 'B', 'C', 'D', 'E'].map((sectionId) => (
+        {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'].map((sectionId) => (
           <Box key={sectionId}>
             <List
               sx={{ width: '100%', maxWidth: 360, bgcolor: grey[100] }}
