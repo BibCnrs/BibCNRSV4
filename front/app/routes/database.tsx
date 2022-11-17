@@ -71,7 +71,7 @@ export default function Search() {
                         Small description
                       </Typography>
                     </CardContent>
-                    <CardActions disableSpacing>
+                    <CardActions>
                       <IconButton aria-label="add to favorites">
                         <FavoriteIcon />
                       </IconButton>

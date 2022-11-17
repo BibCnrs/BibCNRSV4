@@ -39,7 +39,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function SearchItem({ index }: { index: number }) {
+export default function ResultItem({ index }: { index: number }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -61,7 +61,7 @@ export default function SearchItem({ index }: { index: number }) {
           Bilingual Education, Austin, TX. 64 pp.
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions>
         <Stack direction="row" spacing={1}>
           <Chip label="Open Access" color="primary" variant="outlined" />
           <Chip label="Diamond" color="success" variant="outlined" />

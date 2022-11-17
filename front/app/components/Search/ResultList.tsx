@@ -2,11 +2,11 @@ import IconButton from '@mui/material/IconButton';
 import HistoryIcon from '@mui/icons-material/History';
 import { Pagination, SwipeableDrawer, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import SearchItem from './SearchItem';
+import ResultItem from './ResultItem';
 import { useState } from 'react';
 import SearchHistory from './SearchHistory';
 
-export default function SearchItems({ modeSearch }: { modeSearch: string }) {
+export default function ResultList({ modeSearch }: { modeSearch: string }) {
   const [isOpenHistory, setOpenHistory] = useState(false);
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -45,7 +45,7 @@ export default function SearchItems({ modeSearch }: { modeSearch: string }) {
       </Box>
 
       {[...Array(10)].map((x, i) => (
-        <SearchItem index={i} />
+        <ResultItem index={i} />
       ))}
 
       <Pagination count={10} color="primary" sx={{ paddingBottom: '1rem' }} />

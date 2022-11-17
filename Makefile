@@ -24,7 +24,7 @@ start: ## Start the project with docker.
 	$(DOCKER_COMPOSE) up --force-recreate -d
 
 remix: ## Start remix local.
-	cd remix && yarn run dev
+	cd front && yarn run dev
 
 logs: ## Display logs
 	$(DOCKER_COMPOSE) logs -f

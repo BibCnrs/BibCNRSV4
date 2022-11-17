@@ -12,18 +12,14 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Link } from '@remix-run/react';
 
-interface Props {
-  window?: () => Window;
-}
-
 const drawerWidth = 240;
 const navItems = ['Search', 'Database', 'Découvrir', 'Outils'];
 
-export default function DrawerAppBar({ window }: Props) {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+export default function DrawerAppBar() {
+  const [openDrawer, setOpenDrawer] = React.useState(false);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setOpenDrawer(!openDrawer);
   };
 
   const drawer = (
@@ -54,9 +50,6 @@ export default function DrawerAppBar({ window }: Props) {
       </List>
     </Box>
   );
-
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -102,9 +95,8 @@ export default function DrawerAppBar({ window }: Props) {
       </AppBar>
       <Box component="nav">
         <Drawer
-          container={container}
           variant="temporary"
-          open={mobileOpen}
+          open={openDrawer}
           onClose={handleDrawerToggle}
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.

@@ -1,7 +1,7 @@
 import { Box } from '@mui/system';
 import { grey } from '@mui/material/colors';
 import SearchFacet from './SearchFacet';
-import SearchItems from './SearchItems';
+import ResultList from './ResultList';
 
 export default function SearchResult({ modeSearch }: { modeSearch: string }) {
   return (
@@ -16,7 +16,7 @@ export default function SearchResult({ modeSearch }: { modeSearch: string }) {
         <SearchFacet />
       </Box>
       <Box sx={{ flex: { xs: 1, sm: 3 } }}>
-        <SearchItems modeSearch={modeSearch} />
+        <ResultList modeSearch={modeSearch} />
       </Box>
     </Box>
   );
