@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Stack } from '@mui/system';
-import { Chip } from '@mui/material';
+import { Chip, Link } from '@mui/material';
 import type { IconButtonProps } from '@mui/material/IconButton';
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -34,7 +34,13 @@ function a11yProps(index: number) {
   };
 }
 
-export default function ResultItem({ index }: { index: number }) {
+export default function ResultItem({
+  index,
+  result,
+}: {
+  index: number;
+  result: any;
+}) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -44,17 +50,17 @@ export default function ResultItem({ index }: { index: number }) {
   return (
     <Card sx={{ margin: 2 }}>
       <CardHeader
-        title="Cross Cultural Attitude Inventory [and] Test Manual."
-        subheader="September 14, 2016"
+        title={
+          <Link href="#" underline="none">
+            {result.title}
+          </Link>
+        }
+        subheader={result.database}
         color="secondary"
-        disableSpacing
         {...a11yProps(index)}
       />
       <CardContent sx={{ paddingY: 0 }}>
-        <Typography variant="body2" color="text.secondary">
-          Jackson, Steve; Klinger, Ron; Dissemination and Assessment Center for
-          Bilingual Education, Austin, TX. 64 pp.
-        </Typography>
+        <Typography variant="body2" color="text.secondary"></Typography>
       </CardContent>
       <CardActions>
         <Stack direction="row" spacing={1}>
@@ -72,32 +78,26 @@ export default function ResultItem({ index }: { index: number }) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Resumé:</Typography>
+          <Typography variant="subtitle2">Auteur(s):</Typography>
           <Typography paragraph>
-            The Cross-Cultural Attitude Inventory provides a means for measuring
-            the degree of positive or negative feeling which Mexican-American
-            and Angle students (ages 3 to 18) have for the two cultures. Present
-            test validity is based on face validity and the rationale behind the
-            item selection and construction procedures. The inventory also
-            provides a springboard from which other ideas may come. The
-            inventory is comprised of 24 test items that relate to language,
-            facial characteristics, foods, games, clothing, sports, and flags.
-            The use of five faces beneath each item seems to work well with
-            children in a wide range of age, sex, and ethnic categories. The
-            test provides a score based on an equal number of items
-            representative of each culture. It is a relatively quick instrument
-            to administer (20-30 minutes), and is easy for both test
-            administrator and subjects to understand. The age range of subjects
-            who can be expected to understand and relate to the test is from 3
-            to 12 years, although older subjects have been used; the test should
-            be administered individually to those of junior-high age or older.
-            Administration of the test is discussed as to time considerations,
-            physical facilities, materials, language considerations, special
-            considerations by age group, and instructions to students (ages 3
-            through 8 and ages 9 and above) and terms to be used for test items.
-            The test is scored by assigning a value of 1 to 5. A copy of the
-            Test Data Recording Form is provided. (Author/DB)
+            {result.authors?.map((author: any, index: number) => (
+              <Link href="#" key={index} underline="none">
+                {author}
+              </Link>
+            ))}
           </Typography>
+          <Typography variant="subtitle2">Sujets:</Typography>
+          <Typography paragraph>
+            {result.subjects?.map((subject: any, index: number) => (
+              <Link href="#" key={index} underline="none">
+                {subject}
+              </Link>
+            ))}
+          </Typography>
+          <Typography variant="subtitle2">Date de publication:</Typography>
+          <Typography paragraph>{result.publicationDate}</Typography>
+          <Typography variant="subtitle2">Type de publication:</Typography>
+          <Typography paragraph>{result.publicationType}</Typography>
         </CardContent>
       </Collapse>
     </Card>

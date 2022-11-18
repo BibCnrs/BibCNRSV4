@@ -4,6 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { Form } from '@remix-run/react';
 
 export default function Index() {
   return (
@@ -24,7 +25,7 @@ export default function Index() {
       >
         Accès aux ressources documentaires du CNRS
       </Typography>
-      <form method="post" action="search">
+      <Form method="get" action="/search">
         <Box
           sx={{
             p: '2px 4px',
@@ -40,7 +41,7 @@ export default function Index() {
             sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
             placeholder="Search article"
             inputProps={{ 'aria-label': 'Search article input' }}
-            name="query"
+            name="term"
           />
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton
@@ -52,7 +53,7 @@ export default function Index() {
             <SearchIcon />
           </IconButton>
         </Box>
-      </form>
+      </Form>
     </Box>
   );
 }

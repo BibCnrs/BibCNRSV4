@@ -19,7 +19,7 @@ services:
     volumes:
       - '.:/app'
     environment:
-      - VITE_API_URL=http://api:3001
+      - API_URL=http://api:3001
 
   db:
     image: postgres:14
