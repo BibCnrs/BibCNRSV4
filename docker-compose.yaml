@@ -17,8 +17,8 @@ services:
       - INSHS_PROFILE=${INSHS_PROFILE}
     ports:
       - '3002:3001'
-    # depends_on:
-    #   - db
+    depends_on:
+      - db
 
   front:
     image: node:18
@@ -31,16 +31,18 @@ services:
     ports:
       - '3000:3000'
 
-  # db:
-  #   image: postgres:14
-  #   ports:
-  #     - '5432:5432'
-  #   environment:
-  #     - POSTGRES_USER=${DATABASE_USER}
-  #     - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-  #     - POSTGRES_DB=${DATABASE_NAME}
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
+  db:
+    container_name: bibcnrs_db_1
+    image: postgres:14
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./api/backups:/backups
 
 volumes:
   pgdata:

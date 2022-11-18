@@ -61,6 +61,22 @@ To follow the best practices please read this [documentation](https://remix.run/
 
 The API is written in [Nest.js](https://nestjs.com/).
 
+To understand the migrations we encourage you to look at this [documentation](https://www.prisma.io/docs/concepts/components/prisma-migrate)
+
+A make command is available for run migrations inside docker
+
+```sh
+make migration-api
+```
+
+### Import data
+
+To import data you need to put your backup file in `./api/backups` and run
+  
+```sh
+make restore-db-dev `name of your backup file`
+```
+
 ---
 
 ## Author
