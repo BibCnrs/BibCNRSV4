@@ -19,4 +19,9 @@ export class ArticleSearchQueryDto {
   @IsString()
   @IsOptional()
   sort?: string;
+
+  @Transform(({ value }) => parseInt(value))
+  @IsNumber()
+  @IsOptional()
+  page?: number;
 }
