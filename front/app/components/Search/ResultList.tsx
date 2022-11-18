@@ -6,7 +6,17 @@ import ResultItem from './ResultItem';
 import { useState } from 'react';
 import SearchHistory from './SearchHistory';
 
-export default function ResultList({ modeSearch }: { modeSearch: string }) {
+type ResultListProps = {
+  modeSearch: string;
+  results: Array<any>;
+  nbTotalResults: number;
+};
+
+export default function ResultList({
+  modeSearch,
+  nbTotalResults,
+  results,
+}: ResultListProps) {
   const [isOpenHistory, setOpenHistory] = useState(false);
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -30,7 +40,7 @@ export default function ResultList({ modeSearch }: { modeSearch: string }) {
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6" color="text.secondary" sx={{ margin: 2 }}>
-          100 résultats
+          {nbTotalResults} résultats
         </Typography>
 
         <IconButton
@@ -44,8 +54,8 @@ export default function ResultList({ modeSearch }: { modeSearch: string }) {
         </IconButton>
       </Box>
 
-      {[...Array(10)].map((x, i) => (
-        <ResultItem key={i} index={i} />
+      {results?.map((result, i) => (
+        <ResultItem key={i} index={i} result={result} />
       ))}
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Pagination count={10} color="primary" sx={{ paddingBottom: '1rem' }} />

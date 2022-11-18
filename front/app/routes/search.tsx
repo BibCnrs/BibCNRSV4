@@ -24,25 +24,42 @@ function a11yProps(index: number) {
 
 export default function Search() {
   const loaderData = useLoaderData();
-
   const [termSearch, setTermSearch] = useState(loaderData.term);
+  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(undefined);
   const [modeSearch, setModeSearch] = useState('article');
-
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setModeSearch(newValue);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch(
-        `http://localhost:3002/ebsco/INSHS/article/search?term=${termSearch}&resultPerPage=10`,
-      );
-      const tmp = await res.json();
-      setData(tmp);
+      try {
+        if (termSearch === '' || !termSearch) {
+          console.log('no term');
+          return;
+        }
+        setIsLoading(true);
+        window.history.pushState(
+          {},
+          '',
+          `/search?term=${termSearch}&resultPerPage=10`,
+        );
+
+        const res = await fetch(
+          `http://localhost:3002/ebsco/INSHS/article/search?term=${termSearch}&resultPerPage=10`,
+        );
+        const tmp = await res.json();
+        setData(tmp);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
     fetchData();
-  }, [termSearch, loaderData.apiUrl]);
+  }, [termSearch, setIsLoading]);
 
   return (
     <Box
@@ -55,36 +72,42 @@ export default function Search() {
       }}
     >
       <Box sx={{ padding: '2rem' }}>
-        <form method="get">
-          <Box
-            sx={{
-              p: '2px 4px',
-              display: 'flex',
-              alignItems: 'center',
-              width: 400,
-              border: '1px solid',
-              borderColor: 'primary.main',
-              borderRadius: '4px',
-            }}
+        <Box
+          onSubmit={(e) => {
+            e.preventDefault();
+            // get the term value input from the form
+            const term = e.currentTarget.term.value;
+            setTermSearch(term);
+            console.log(term);
+          }}
+          component="form"
+          sx={{
+            p: '2px 4px',
+            display: 'flex',
+            alignItems: 'center',
+            width: 400,
+            border: '1px solid',
+            borderColor: 'primary.main',
+            borderRadius: '4px',
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
+            placeholder="Search article"
+            inputProps={{ 'aria-label': 'Search article input' }}
+            name="term"
+            defaultValue={loaderData?.term || ''}
+          />
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <IconButton
+            type="submit"
+            color="primary"
+            sx={{ p: '10px' }}
+            aria-label="search"
           >
-            <InputBase
-              sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
-              placeholder="Search article"
-              inputProps={{ 'aria-label': 'Search article input' }}
-              name="term"
-              defaultValue={loaderData?.term || ''}
-            />
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton
-              type="submit"
-              color="primary"
-              sx={{ p: '10px' }}
-              aria-label="search"
-            >
-              <SearchIcon />
-            </IconButton>
-          </Box>
-        </form>
+            <SearchIcon />
+          </IconButton>
+        </Box>
       </Box>
 
       <Box sx={{ width: '100%' }}>
@@ -105,9 +128,11 @@ export default function Search() {
             <Tab label="Metadore" disabled value="metadore" {...a11yProps(2)} />
           </Tabs>
         </Box>
-        {data ? (
-          <SearchResult modeSearch={modeSearch} />
-        ) : (
+        {!isLoading && data && (
+          <SearchResult modeSearch={modeSearch} data={data} />
+        )}
+
+        {isLoading && (
           <Box display="flex" justifyContent="center" sx={{ marginTop: 4 }}>
             <CircularProgress />
           </Box>
