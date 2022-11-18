@@ -3,27 +3,17 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box } from '@mui/system';
-import { useActionData, useSearchParams, useLoaderData, useTransition } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { useEffect, useState } from 'react';
 import { CircularProgress, Tab, Tabs } from '@mui/material';
 import SearchResult from '~/components/Search/SearchResult';
 
 export async function loader({ request }: { request: Request }) {
-  //console.log('request', request);
   const url = new URL(request.url);
   const term = url.searchParams.get('term') || '';
-  const res = await fetch(
-    `${process.env.API_URL}/ebsco/INSHS/article/search?term=${term}&resultPerPage=10`,
-  );
-  const data = await res.json();
-  return { term, data };
+  const apiUrl = process.env.API_URL;
+  return { term, apiUrl };
 }
-
-// export async function action({ request }: { request: Request }) {
-//   const formData = await request.formData();
-//   const term = formData.get('term');
-//   return { term };
-// }
 
 function a11yProps(index: number) {
   return {
@@ -33,24 +23,26 @@ function a11yProps(index: number) {
 }
 
 export default function Search() {
-  //const actionData = useActionData();
-  const transition = useTransition();
-  console.log('search transition', transition);
-
   const loaderData = useLoaderData();
-  const [, setSearchParams] = useSearchParams();
 
+  const [termSearch, setTermSearch] = useState(loaderData.term);
+  const [data, setData] = useState(undefined);
   const [modeSearch, setModeSearch] = useState('article');
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setModeSearch(newValue);
   };
 
-  // useEffect(() => {
-  //   if (actionData?.term) {
-  //     setSearchParams({ term: actionData.term });
-  //   }
-  // }, [actionData, setSearchParams]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(
+        `http://localhost:3002/ebsco/INSHS/article/search?term=${termSearch}&resultPerPage=10`,
+      );
+      const tmp = await res.json();
+      setData(tmp);
+    };
+    fetchData();
+  }, [termSearch, loaderData.apiUrl]);
 
   return (
     <Box
@@ -113,7 +105,7 @@ export default function Search() {
             <Tab label="Metadore" disabled value="metadore" {...a11yProps(2)} />
           </Tabs>
         </Box>
-        {loaderData?.data ? (
+        {data ? (
           <SearchResult modeSearch={modeSearch} />
         ) : (
           <Box display="flex" justifyContent="center" sx={{ marginTop: 4 }}>

@@ -4,10 +4,8 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { useTransition } from "@remix-run/react";
-import { Form } from "@remix-run/react";
-import { redirect } from '@remix-run/node';
-import { FormEvent } from 'react';
+import { useTransition } from '@remix-run/react';
+import { Form } from '@remix-run/react';
 
 export default function Index() {
   const transition = useTransition();

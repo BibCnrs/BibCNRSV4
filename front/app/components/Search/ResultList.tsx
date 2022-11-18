@@ -47,8 +47,9 @@ export default function ResultList({ modeSearch }: { modeSearch: string }) {
       {[...Array(10)].map((x, i) => (
         <ResultItem key={i} index={i} />
       ))}
-
-      <Pagination count={10} color="primary" sx={{ paddingBottom: '1rem' }} />
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Pagination count={10} color="primary" sx={{ paddingBottom: '1rem' }} />
+      </Box>
 
       <SwipeableDrawer
         anchor={'right'}
