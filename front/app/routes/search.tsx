@@ -3,15 +3,16 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import { Box } from '@mui/system';
-import { useActionData, useSearchParams } from '@remix-run/react';
+import { useLoaderData } from '@remix-run/react';
 import { useEffect, useState } from 'react';
-import { Tab, Tabs } from '@mui/material';
+import { CircularProgress, Tab, Tabs } from '@mui/material';
 import SearchResult from '~/components/Search/SearchResult';
 
-export async function action({ request }: { request: Request }) {
-  const formData = await request.formData();
-  const query = formData.get('query');
-  return query;
+export async function loader({ request }: { request: Request }) {
+  const url = new URL(request.url);
+  const term = url.searchParams.get('term') || '';
+  const apiUrl = process.env.API_URL;
+  return { term, apiUrl };
 }
 
 function a11yProps(index: number) {
@@ -22,20 +23,43 @@ function a11yProps(index: number) {
 }
 
 export default function Search() {
-  const data = useActionData();
-  const [, setSearchParams] = useSearchParams();
-
+  const loaderData = useLoaderData();
+  const [termSearch, setTermSearch] = useState(loaderData.term);
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(undefined);
   const [modeSearch, setModeSearch] = useState('article');
-
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setModeSearch(newValue);
   };
 
   useEffect(() => {
-    if (data) {
-      setSearchParams({ query: data });
-    }
-  }, [data, setSearchParams]);
+    const fetchData = async () => {
+      try {
+        if (termSearch === '' || !termSearch) {
+          console.log('no term');
+          return;
+        }
+        setIsLoading(true);
+        window.history.pushState(
+          {},
+          '',
+          `/search?term=${termSearch}&resultPerPage=10`,
+        );
+
+        const res = await fetch(
+          `http://localhost:3002/ebsco/INSHS/article/search?term=${termSearch}&resultPerPage=10`,
+        );
+        const tmp = await res.json();
+        setData(tmp);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [termSearch, setIsLoading]);
 
   return (
     <Box
@@ -48,36 +72,42 @@ export default function Search() {
       }}
     >
       <Box sx={{ padding: '2rem' }}>
-        <form method="post">
-          <Box
-            sx={{
-              p: '2px 4px',
-              display: 'flex',
-              alignItems: 'center',
-              width: 400,
-              border: '1px solid',
-              borderColor: 'primary.main',
-              borderRadius: '4px',
-            }}
+        <Box
+          onSubmit={(e) => {
+            e.preventDefault();
+            // get the term value input from the form
+            const term = e.currentTarget.term.value;
+            setTermSearch(term);
+            console.log(term);
+          }}
+          component="form"
+          sx={{
+            p: '2px 4px',
+            display: 'flex',
+            alignItems: 'center',
+            width: 400,
+            border: '1px solid',
+            borderColor: 'primary.main',
+            borderRadius: '4px',
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
+            placeholder="Search article"
+            inputProps={{ 'aria-label': 'Search article input' }}
+            name="term"
+            defaultValue={loaderData?.term || ''}
+          />
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+          <IconButton
+            type="submit"
+            color="primary"
+            sx={{ p: '10px' }}
+            aria-label="search"
           >
-            <InputBase
-              sx={{ ml: 1, flex: 1, borderRadius: '4px' }}
-              placeholder="Search article"
-              inputProps={{ 'aria-label': 'Search article input' }}
-              name="query"
-              defaultValue={data || ''}
-            />
-            <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-            <IconButton
-              type="submit"
-              color="primary"
-              sx={{ p: '10px' }}
-              aria-label="search"
-            >
-              <SearchIcon />
-            </IconButton>
-          </Box>
-        </form>
+            <SearchIcon />
+          </IconButton>
+        </Box>
       </Box>
 
       <Box sx={{ width: '100%' }}>
@@ -98,7 +128,15 @@ export default function Search() {
             <Tab label="Metadore" disabled value="metadore" {...a11yProps(2)} />
           </Tabs>
         </Box>
-        <SearchResult modeSearch={modeSearch} />
+        {!isLoading && data && (
+          <SearchResult modeSearch={modeSearch} data={data} />
+        )}
+
+        {isLoading && (
+          <Box display="flex" justifyContent="center" sx={{ marginTop: 4 }}>
+            <CircularProgress />
+          </Box>
+        )}
       </Box>
     </Box>
   );

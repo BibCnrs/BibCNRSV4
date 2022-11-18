@@ -35,7 +35,7 @@ make install
 | DATABASE_URL      | Direct URL for database connection use by Prisma |
 | COOKIE_SECRET     | Password use for Cookie                          |
 | JWT_SECRET        | Password use for JWT                             |
-| VITE_API_URL      | URL location of API use by front                 |
+| API_URL           | URL location of API use by front                 |
 | EBSCO_API_URL     | URL location of EBSCO API use by bibAPI          |
 | INSHS_USER_ID     | user use for INSHS search                        |
 | INSHS_PASSWORD    | password use for INSHS search                    |
