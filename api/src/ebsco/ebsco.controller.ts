@@ -14,11 +14,12 @@ export class EbscoController {
     const { authToken, sessionToken } =
       await this.ebscoService.createEbscoSession();
     const ebscoQuery = this.ebscoService.getEbscoQuery(query);
-    const searchResult = await this.ebscoService.searchArticles(
+    let searchResult = await this.ebscoService.searchArticles(
       authToken,
       sessionToken,
       ebscoQuery,
     );
+    searchResult = this.ebscoService.articleResultsParser(searchResult);
     return searchResult;
   }
 }
