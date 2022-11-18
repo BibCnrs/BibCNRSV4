@@ -72,7 +72,7 @@ make migration-api
 ### Import data
 
 To import data you need to put your backup file in `./api/backups` and run
-  
+
 ```sh
 make restore-db-dev `name of your backup file`
 ```
