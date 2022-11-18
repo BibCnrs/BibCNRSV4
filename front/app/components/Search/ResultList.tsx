@@ -10,12 +10,16 @@ type ResultListProps = {
   modeSearch: string;
   results: Array<any>;
   nbTotalResults: number;
+  page: number;
+  setPage: (page: number) => void;
 };
 
 export default function ResultList({
   modeSearch,
   nbTotalResults,
   results,
+  page,
+  setPage,
 }: ResultListProps) {
   const [isOpenHistory, setOpenHistory] = useState(false);
   const toggleDrawer =
@@ -58,7 +62,13 @@ export default function ResultList({
         <ResultItem key={i} index={i} result={result} />
       ))}
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Pagination count={10} color="primary" sx={{ paddingBottom: '1rem' }} />
+        <Pagination
+          count={10}
+          color="primary"
+          page={page}
+          onChange={(e, value) => setPage(value)}
+          sx={{ paddingBottom: '1rem' }}
+        />
       </Box>
 
       <SwipeableDrawer

@@ -11,8 +11,9 @@ import SearchResult from '~/components/Search/SearchResult';
 export async function loader({ request }: { request: Request }) {
   const url = new URL(request.url);
   const term = url.searchParams.get('term') || '';
+  const page = parseInt(url.searchParams?.get('page') || '1');
   const apiUrl = process.env.API_URL;
-  return { term, apiUrl };
+  return { term, apiUrl, page };
 }
 
 function a11yProps(index: number) {
@@ -25,9 +26,11 @@ function a11yProps(index: number) {
 export default function Search() {
   const loaderData = useLoaderData();
   const [termSearch, setTermSearch] = useState(loaderData.term);
+  const [page, setPage] = useState(loaderData.page || 1);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState(undefined);
   const [modeSearch, setModeSearch] = useState('article');
+
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     setModeSearch(newValue);
   };
@@ -36,18 +39,18 @@ export default function Search() {
     const fetchData = async () => {
       try {
         if (termSearch === '' || !termSearch) {
-          console.log('no term');
           return;
         }
+
         setIsLoading(true);
         window.history.pushState(
           {},
           '',
-          `/search?term=${termSearch}&resultPerPage=10`,
+          `/search?term=${termSearch}&page=${page}&resultPerPage=10`,
         );
 
         const res = await fetch(
-          `http://localhost:3002/ebsco/INSHS/article/search?term=${termSearch}&resultPerPage=10`,
+          `http://localhost:3002/ebsco/INSHS/article/search?term=${termSearch}&page=${page}resultPerPage=10`,
         );
         const tmp = await res.json();
         setData(tmp);
@@ -59,7 +62,7 @@ export default function Search() {
     };
 
     fetchData();
-  }, [termSearch, setIsLoading]);
+  }, [termSearch, setIsLoading, page]);
 
   return (
     <Box
@@ -78,7 +81,6 @@ export default function Search() {
             // get the term value input from the form
             const term = e.currentTarget.term.value;
             setTermSearch(term);
-            console.log(term);
           }}
           component="form"
           sx={{
@@ -129,7 +131,12 @@ export default function Search() {
           </Tabs>
         </Box>
         {!isLoading && data && (
-          <SearchResult modeSearch={modeSearch} data={data} />
+          <SearchResult
+            modeSearch={modeSearch}
+            data={data}
+            page={page}
+            setPage={setPage}
+          />
         )}
 
         {isLoading && (

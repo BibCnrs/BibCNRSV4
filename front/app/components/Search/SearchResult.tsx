@@ -6,9 +6,13 @@ import ResultList from './ResultList';
 export default function SearchResult({
   modeSearch,
   data,
+  page,
+  setPage,
 }: {
   modeSearch: string;
   data: any;
+  page: number;
+  setPage: (page: number) => void;
 }) {
   return (
     <Box
@@ -26,6 +30,8 @@ export default function SearchResult({
           modeSearch={modeSearch}
           results={data.results}
           nbTotalResults={data.totalHits}
+          page={page}
+          setPage={setPage}
         />
       </Box>
     </Box>

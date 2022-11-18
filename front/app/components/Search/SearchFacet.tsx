@@ -9,7 +9,6 @@ import { Box } from '@mui/system';
 import { grey } from '@mui/material/colors';
 
 export default function SearchFacet({ facets }: { facets: any }) {
-  console.log(facets);
   if (!facets) {
     return null;
   }
