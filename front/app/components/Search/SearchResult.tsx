@@ -19,7 +19,7 @@ export default function SearchResult({
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <SearchFacet />
+        <SearchFacet facets={data.facets} />
       </Box>
       <Box sx={{ flex: { xs: 1, sm: 3 } }}>
         <ResultList
