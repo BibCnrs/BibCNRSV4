@@ -1,6 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../prisma.service';
+import { DatabaseService } from '../database.service';
 import { EbscoController } from './ebsco.controller';
 import { EbscoService } from './ebsco.service';
 
@@ -13,6 +15,8 @@ describe('EbscoController', () => {
       providers: [
         JwtService,
         EbscoService,
+        DatabaseService,
+        PrismaService,
         HttpService,
         {
           provide: HttpService,

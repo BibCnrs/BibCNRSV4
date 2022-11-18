@@ -82,7 +82,7 @@ export class EbscoService {
         PageNumber: 1,
         Highlight: 'n',
       },
-      Actions: ['goToPage(1)'],
+      Actions: [`goToPage(${query.page || 1})`],
     };
   }
 
