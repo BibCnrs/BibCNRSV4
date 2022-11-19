@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Card,
   CardActions,
   CardContent,
@@ -12,12 +11,29 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { blue, green, grey, orange, purple, red } from '@mui/material/colors';
+import { useLoaderData } from '@remix-run/react';
+import { grey } from '@mui/material/colors';
 
-const colours = [blue[800], green[500], orange[500], purple[800], red[800]];
-const getColour = () => colours[Math.floor(Math.random() * colours.length)];
+export async function loader() {
+  const response = await fetch(`${process.env.API_URL}/ebsco/databases`);
+  const data = await response.json();
+
+  // Create a list of databases grouped by first letter
+  const databasesByLetter = data.reduce((acc: any, database: any) => {
+    const firstLetter = database.name_fr[0].toUpperCase();
+    if (!acc[firstLetter]) {
+      acc[firstLetter] = [];
+    }
+    acc[firstLetter].push(database);
+    return acc;
+  }, {});
+  return databasesByLetter;
+}
 
 export default function Search() {
+  const databasesByLetter = useLoaderData();
+
+  console.log('databasesByLetter', databasesByLetter['A']);
   return (
     <Box
       sx={{
@@ -32,58 +48,58 @@ export default function Search() {
       <Box
         sx={{
           display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
         }}
       >
         {/* Display category by letters */}
-        {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'].map((sectionId) => (
-          <Box key={sectionId}>
-            <List
-              sx={{ width: '100%', maxWidth: 360, bgcolor: grey[100] }}
-              subheader={
-                <ListSubheader
-                  sx={{
-                    background: grey[100],
-                    fontWeight: 'bold',
-                    fontSize: '20px',
-                  }}
-                >
-                  {sectionId}
-                </ListSubheader>
-              }
-            >
-              {[0, 1, 2, 3].map((item) => (
-                <ListItem key={item}>
-                  <Card sx={{ minWidth: 345 }}>
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          sx={{ bgcolor: getColour() }}
-                          aria-label="recipe"
-                        >
-                          {item}
-                        </Avatar>
-                      }
-                      title={`Database ${sectionId}-${item}`}
-                    />
-                    <CardContent>
-                      <Typography variant="body2" color="text.secondary">
-                        Small description
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <IconButton aria-label="add to favorites">
-                        <FavoriteIcon />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        ))}
+        {Object.keys(databasesByLetter)
+          .sort()
+          .map((letter) => (
+            <Box key={letter}>
+              <List
+                sx={{
+                  width: '100%',
+                  maxWidth: 360,
+                  bgcolor: grey[100],
+                }}
+                subheader={
+                  <ListSubheader
+                    sx={{
+                      background: grey[100],
+                      fontWeight: 'bold',
+                      fontSize: '20px',
+                    }}
+                  >
+                    {letter}
+                  </ListSubheader>
+                }
+              >
+                {databasesByLetter[letter].map((database: any) => (
+                  <ListItem key={database.id}>
+                    <Card>
+                      <CardHeader title={database.name_fr} />
+                      <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                          {database.text_fr}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <IconButton aria-label="add to favorites">
+                          <FavoriteIcon />
+                        </IconButton>
+                        <img
+                          width={25}
+                          height={25}
+                          src={database.image}
+                          alt={database.name_fr}
+                        />
+                      </CardActions>
+                    </Card>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          ))}
       </Box>
     </Box>
   );
